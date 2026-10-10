@@ -1,0 +1,77 @@
+@import "tailwindcss";
+
+@theme {
+    --color-incubunt-azul: #004373;
+    --color-incubunt-amarillo: #ffb025;
+    --font-titulos: "Montserrat", system-ui, sans-serif;
+    --font-cuerpo: "Poppins", system-ui, sans-serif;
+}
+
+:root {
+    font-family: var(--font-cuerpo);
+    color: #172432;
+    background-color: #f3f6f8;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    min-width: 320px;
+}
+
+html {
+    scrollbar-gutter: stable;
+    background: #f3f6f8;
+}
+
+#root {
+    min-width: 0;
+    min-height: 100vh;
+}
+
+.tarjeta-sgv {
+    border-radius: 1rem;
+    border: 1px solid #dfe6eb;
+    background: #fff;
+    box-shadow: 0 1px 2px rgb(20 45 63 / 3%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+    }
+}
+
+/* El espacio de la barra ya lo reserva html, no el menú de roles. */
+html body[data-scroll-locked] {
+    margin-right: 0 !important;
+}
+
+button,
+input,
+select,
+textarea {
+    font: inherit;
+}
+
+button,
+select {
+    cursor: pointer;
+}
+
+button:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 3px solid rgb(255 176 37 / 45%);
+    outline-offset: 2px;
+}
