@@ -10,9 +10,11 @@ Prototipo frontend del Sistema de Gestión de Voluntariado de INCUBUNT para regi
 - Navegación adaptable a escritorio, tableta y móvil.
 - Confirmaciones de acciones y visualización del avance de registros.
 
-## Instalación
+## Vista previa
 
 ![Panel de asistencia](docs/capturas/director-escritorio.png)
+
+## Instalación
 
 Requisitos: Git y Node.js 22.12 o superior compatible con Vite 8. El repositorio es privado y requiere acceso autorizado.
 
