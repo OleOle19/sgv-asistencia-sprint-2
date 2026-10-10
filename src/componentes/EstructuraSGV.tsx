@@ -27,9 +27,9 @@ function ContenidoBarraLateral({ alCerrar }: { alCerrar?: () => void }) {
   return (
     <>
       <div className="px-5 pb-8 pt-6">
-        <div className="rounded-xl bg-white p-5">
-          <img src="/marca/isologo-incubunt.svg" alt="INCUBUNT: Inspira, Innova, Emprende"
-            className="mx-auto h-auto w-[120px]" />
+        <div className="rounded-xl bg-white p-6">
+          <img src="/marca/isologo-incubunt.png" alt="INCUBUNT: Inspira, Innova, Emprende"
+            className="mx-auto h-auto w-[140px]" />
         </div>
       </div>
       <nav className="flex-1 px-3" aria-label="Navegación principal">

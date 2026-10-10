@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Toaster as Avisos, toast as notificar } from 'sonner'
 import { EstructuraSGV } from "./componentes/EstructuraSGV";
 import { VistaDirector } from "./componentes/VistaDirector";
 import { VistaPresidencia } from "./componentes/VistaPresidencia";
@@ -33,9 +34,11 @@ export function Aplicacion() {
                         : registro,
                 ),
             )
+            notificar.success('Asistencia marcada', { description: 'Registro actualizado en esta demostración. No se envió al servidor.' })
         }
 
         const validarAsistencia = (id : string) => {
+            if (rolVista !== 'Director de proyecto') return
             establecerRegistros((actuales) =>
                 actuales.map((registro) =>
                     registro.id === id
@@ -43,18 +46,22 @@ export function Aplicacion() {
                         : registro,
                 ),
             )
+            notificar.success('Asistencia validada', { description: 'Cambio local de la demostración.' })
         }
 
         const observarAsistencia = (id: string, observacion: string) => {
+            if (rolVista !== 'Director de proyecto' || !observacion.trim()) return
             establecerRegistros((actuales) =>
                 actuales.map((registro) =>
                     registro.id === id ? { ...registro, estado: 'Observada', observacion } : registro,
                 ),
             )
+            notificar('Observación registrada', { description: 'El motivo queda visible en la ficha de asistencia de esta demo.' })
         }
 
         return (
             <EstructuraSGV rol={rolVista} alCambiarRol={establecerRolVista}>
+                <Avisos position="bottom-right" closeButton toastOptions={{ style: { fontFamily: 'Poppins, sans-serif', background: '#ffffff', color: '#172432', border: '1px solid #dfe6eb', borderLeft: '4px solid #004373' } }} />
                 <section aria-label="Control de demostración" className="tarjeta-sgv mb-5 p-4 md:mb-6 md:px-5">
                     <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                         <p className="text-xs font-semibold uppercase tracking-wider text-[#70818d]">Control de demostración</p>

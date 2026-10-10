@@ -31,7 +31,7 @@ export function Boton({
   return (
     <button
       type={type}
-      className={`inline-flex shrink-0 items-center justify-center gap-2 rounded-xl
+      className={`boton-sgv inline-flex shrink-0 items-center justify-center gap-2 rounded-xl
         text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-3
         focus-visible:ring-[#ffb025]/40 disabled:cursor-not-allowed disabled:opacity-50
         ${clasesPorTamaño[tamaño]} ${clasesPorVariante[variante]} ${className}`}

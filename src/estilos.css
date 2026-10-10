@@ -75,3 +75,51 @@ textarea:focus-visible {
     outline: 3px solid rgb(255 176 37 / 45%);
     outline-offset: 2px;
 }
+
+/* Sistema visual SGV: superficies sólidas, sin filtros de desenfoque. */
+.cabecera-destacada {
+  border-radius: 24px;
+  border-top: 4px solid #ffb025;
+  background: #004373;
+  box-shadow: 0 12px 28px rgb(0 67 115 / 12%);
+}
+.metricas-destacadas { width: 100%; }
+.metrica-destacada {
+  min-width: 0;
+  padding: 20px;
+  border: 1px solid #37688a;
+  border-radius: 16px;
+  background: #14527e;
+  transition: border-color 180ms ease, background-color 180ms ease;
+}
+.metrica-destacada:hover { border-color: #ffb025; background: #194e74; }
+.metrica-destacada strong { font-family: Montserrat, sans-serif; font-size: 28px; letter-spacing: -.04em; line-height: 1.1; }
+.metrica-destacada p { margin-top: 5px; color: #e1edf5; font-size: 12px; }
+.metrica-destacada__icono {
+  display: grid; width: 44px; height: 44px; flex-shrink: 0;
+  place-items: center; border-radius: 13px; background: #2c638b; color: #ffb025;
+}
+.boton-sgv { transition: background-color 160ms ease, border-color 160ms ease, box-shadow 160ms ease; }
+.boton-sgv:not(:disabled):hover { box-shadow: 0 4px 12px rgb(0 67 115 / 12%); }
+.boton-sgv:not(:disabled):active { box-shadow: inset 0 2px 4px rgb(0 67 115 / 14%); }
+main > section, main > div { animation: aparecer-sgv 240ms ease-out; }
+@keyframes aparecer-sgv { from { opacity: .35; } to { opacity: 1; } }
+.indicador-circular {
+  display: flex; flex-direction: column; align-items: center; gap: 16px;
+  margin: 0; padding: 24px; text-align: center;
+}
+.indicador-circular__grafico { position: relative; width: 160px; height: 160px; flex-shrink: 0; }
+.indicador-circular svg { width: 100%; height: 100%; }
+.indicador-circular__grafico > strong {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  color: #004373; font-family: Montserrat, sans-serif; font-size: 36px; letter-spacing: -.05em;
+}
+.indicador-circular__grafico > strong span { font-size: 17px; margin-left: 3px; }
+.indicador-circular figcaption > strong { color: #172432; font-size: 14px; }
+.indicador-circular figcaption p { margin-top: 5px; color: #657381; font-size: 12px; line-height: 1.7; }
+.indicador-circular__arco { transition: stroke-dashoffset 400ms ease; }
+.barra-horas { animation: crecer-barra 420ms ease-out both; transform-origin: bottom; }
+@keyframes crecer-barra { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}

@@ -18,7 +18,8 @@
     "@radix-ui/react-select": "^2.3.7",
     "lucide-react": "^1.54.0",
     "react": "^19.2.8",
-    "react-dom": "^19.2.8"
+    "react-dom": "^19.2.8",
+    "sonner": "^2.0.8"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.3",

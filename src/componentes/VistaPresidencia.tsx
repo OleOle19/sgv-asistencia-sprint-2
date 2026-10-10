@@ -3,6 +3,7 @@ import { InsigniaEstado } from "./InsigniaEstado"
 import { CabeceraSeccion } from './CabeceraSeccion'
 import { TarjetaResumen } from './TarjetaResumen'
 import { AvatarVoluntario } from './AvatarVoluntario'
+import { IndicadorCircular } from './IndicadorCircular'
 import type { RegistroAsistencia, SesionAsistencia } from "../tipos/asistencia"
 
 interface PropiedadesVistaPresidencia {
@@ -35,6 +36,27 @@ export function VistaPresidencia({ sesion, registros }: PropiedadesVistaPresiden
                     {porcentaje < 30 ? 'Registro bajo' : porcentaje < 60 ? 'Registro intermedio' : 'Registro alto'}
                 </div>
             </CabeceraSeccion>
+
+            <div className="tarjeta-sgv grid items-center md:grid-cols-[280px_1fr]">
+                <IndicadorCircular porcentaje={porcentaje} etiqueta="Avance de registros" detalle={`${marcadas} registros recibidos de ${total} participantes`} />
+                <div className="space-y-4 p-5 md:p-7">
+                    <h3 className="font-titulos font-bold text-[#203441]">Distribución por estado</h3>
+                    {(['Validada', 'Pendiente', 'Observada', 'Sin marcar'] as const).map((estado) => {
+                        const cantidad = registros.filter((registro) => registro.estado === estado).length
+                        return (
+                            <div key={estado}>
+                                <div className="mb-2 flex items-center justify-between gap-3 text-xs text-[#536473]">
+                                    <span>{estado}</span><strong>{cantidad} de {total}</strong>
+                                </div>
+                                <div className="h-2 overflow-hidden rounded-full bg-[#e8f2f8]">
+                                    <div className={`h-full rounded-full ${estado === 'Pendiente' ? 'bg-incubunt-amarillo' : 'bg-incubunt-azul'}`}
+                                        style={{ width: `${total ? cantidad / total * 100 : 0}%` }} />
+                                </div>
+                            </div>
+                        )
+                    })}
+                </div>
+            </div>
 
             <div className="tarjeta-sgv overflow-hidden">
                 <div className="border-b border-[#e5ecef] p-5">
