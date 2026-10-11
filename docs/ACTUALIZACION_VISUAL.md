@@ -15,6 +15,14 @@ La navegación es una propuesta local pendiente de la plantilla oficial. Los cam
 5. **Movimiento:** se limita a entradas breves y barras de la gráfica. No se transforman los contenedores generales o el logo. Con `prefers-reduced-motion`, las animaciones y transiciones se desactivan.
 6. **Pruebas:** compilar, revisar tipos y ejecutar las pruebas con el servidor de desarrollo activo. Las pruebas de navegador incluyen los nuevos controles y capturan las pantallas cuando las animaciones terminan.
 
+## Modal de observación
+
+`src/componentes/VistaDirector.tsx` utiliza un diálogo controlado de Radix: la selección del registro abre el modal y coloca el foco en el motivo. Escape, Cancelar y la cruz cierran sin modificar la asistencia; Guardar exige un motivo no vacío. Al cerrar, el foco vuelve al botón original o al filtro de estado si ese botón desapareció tras guardar.
+
+Las clases `modal-sgv` y `modal-sgv-fondo`, en `src/estilos.css`, animan entrada y salida mediante opacidad, escala y desplazamiento breve. La ventana usa un portal, respeta el espacio de la barra de desplazamiento y puede desplazarse internamente en pantallas bajas. Con movimiento reducido no se anima.
+
+La implementación sigue el patrón de [Dialog de shadcn/ui](https://ui.shadcn.com/docs/components/radix/dialog), usando las [primitivas Radix](https://www.radix-ui.com/primitives/docs/components/dialog) ya instaladas, sin incorporar una biblioteca de animación adicional.
+
 ## Dependencias
 
 Los indicadores son SVG/CSS propios. Sonner se incorporó únicamente al sprint 2, siguiendo el patrón de notificaciones documentado por [shadcn/ui](https://ui.shadcn.com/docs/components/radix/sonner) y la [documentación de Sonner](https://sonner.emilkowal.ski/).

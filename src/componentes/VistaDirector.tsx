@@ -1,5 +1,6 @@
-import { useMemo, useState, type FormEvent } from 'react'
-import { Check, CheckCircle2, Clock3, Eye, Inbox, MessageSquareWarning } from 'lucide-react'
+import { useMemo, useRef, useState, type FormEvent } from 'react'
+import { Check, CheckCircle2, Clock3, Eye, Inbox, MessageSquareWarning, X } from 'lucide-react'
+import * as Dialogo from '@radix-ui/react-dialog'
 import { Boton } from './Boton'
 import { InsigniaEstado } from './InsigniaEstado'
 import { CabeceraSeccion } from './CabeceraSeccion'
@@ -30,6 +31,19 @@ export function VistaDirector({
     const [filtroEstado, establecerFiltroEstado] = useState<FiltroEstado>('Todos')
     const [idEnObservacion, establecerIdEnObservacion] = useState<string | null>(null)
     const [motivo, establecerMotivo] = useState('')
+    const botonOrigen = useRef<HTMLElement | null>(null)
+    const [registroSeleccionado, establecerRegistroSeleccionado] = useState<RegistroAsistencia | null>(null)
+
+    const solicitarObservacion = (id: string) => {
+        botonOrigen.current = document.activeElement instanceof HTMLElement ? document.activeElement : null
+        establecerRegistroSeleccionado(registros.find((registro) => registro.id === id) ?? null)
+        establecerMotivo('')
+        establecerIdEnObservacion(id)
+    }
+
+    const cerrarObservacion = () => {
+        establecerIdEnObservacion(null)
+    }
 
     const registrosFiltrados = useMemo (() => {
         const ordenados = [...registros].sort ((a, b) =>
@@ -49,7 +63,6 @@ export function VistaDirector({
         if (!idEnObservacion || !motivo.trim()) return
         alObservar(idEnObservacion, motivo.trim())
         establecerIdEnObservacion(null)
-        establecerMotivo('')
     }
 
     return (
@@ -106,7 +119,7 @@ export function VistaDirector({
                                         <Acciones
                                             registro={registro}
                                             alValidar={alValidar}
-                                            alSolicitarObservacion={establecerIdEnObservacion}
+                                            alSolicitarObservacion={solicitarObservacion}
                                         />
                                     </td>
                                 </tr>
@@ -135,7 +148,7 @@ export function VistaDirector({
                             <Acciones
                                 registro={registro}
                                 alValidar={alValidar}
-                                alSolicitarObservacion={establecerIdEnObservacion}
+                                alSolicitarObservacion={solicitarObservacion}
                             />
                         </article>
                     ))}
@@ -149,39 +162,59 @@ export function VistaDirector({
                 )}
             </section>
 
-            {idEnObservacion && (
-                <form
-                    onSubmit={guardarObservacion}
-                    className="rounded-2xl border border-[#f1c56d] bg-[#fff8e9] p-5"
-                >
-                    <label className="block text-sm font-semibold text-[#604000]" htmlFor="motivo">
-                        Motivo de la observación
-                    </label>
-                    <textarea
-                        id="motivo"
-                        value={motivo}
-                        onChange={(evento) => establecerMotivo(evento.target.value)}
-                        rows={3}
-                        required
-                        className="mt-2 w-full rounded-xl border border-[#ddbd79] bg-white p-3 text-sm"
-                        placeholder="Indica qué debe confirmar o corregir el voluntario"
-                    />
-                    <div className="mt-3 flex flex-wrap gap-2">
-                        <Boton type="submit" variante="observacion">
-                            <MessageSquareWarning className="size-4"/> Guardar observación
-                        </Boton>
-                        <Boton
-                            variante="secundaria"
-                            onClick={ () => {
-                                establecerIdEnObservacion(null)
-                                establecerMotivo('')
-                            }}
-                        >
-                            Cancelar
-                        </Boton>
-                    </div>
-                </form>
-            )}
+            <Dialogo.Root open={idEnObservacion !== null} onOpenChange={(abierto) => { if (!abierto) cerrarObservacion() }}>
+                <Dialogo.Portal>
+                    <Dialogo.Overlay className="modal-sgv-fondo" />
+                    <Dialogo.Content className="modal-sgv"
+                        onOpenAutoFocus={(evento) => {
+                            evento.preventDefault()
+                            document.getElementById('motivo')?.focus()
+                        }}
+                        onCloseAutoFocus={(evento) => {
+                            evento.preventDefault()
+                            if (botonOrigen.current?.isConnected) botonOrigen.current.focus()
+                            else document.querySelector<HTMLButtonElement>('button[aria-label="Estado"]')?.focus()
+                        }}>
+                        <div className="border-b border-[#e5ecef] p-5 pr-14 sm:p-6">
+                            <span className="mb-3 grid size-11 place-items-center rounded-xl bg-[#fff5df] text-[#875700]">
+                                <MessageSquareWarning className="size-5" aria-hidden="true" />
+                            </span>
+                            <Dialogo.Title className="font-titulos text-xl font-bold text-[#172432]">Observar asistencia</Dialogo.Title>
+                            <Dialogo.Description className="mt-2 text-sm leading-6 text-[#657381]">
+                                Indica qué debe confirmar o corregir el voluntario. La hora de marcación no se modificará.
+                            </Dialogo.Description>
+                            <Dialogo.Close asChild>
+                                <Boton variante="fantasma" tamaño="icono" className="absolute right-3 top-3" aria-label="Cerrar observación">
+                                    <X className="size-5" aria-hidden="true" />
+                                </Boton>
+                            </Dialogo.Close>
+                        </div>
+                        <form onSubmit={guardarObservacion} className="p-5 sm:p-6">
+                            {registroSeleccionado && (
+                                <div className="mb-5 flex items-center gap-3 rounded-xl bg-[#f3f6f8] p-3">
+                                    <AvatarVoluntario nombres={registroSeleccionado.nombres} apellidos={registroSeleccionado.apellidos} />
+                                    <div className="min-w-0">
+                                        <p className="break-words text-sm font-semibold text-[#263746]">{registroSeleccionado.apellidos}, {registroSeleccionado.nombres}</p>
+                                        <p className="mt-1 text-xs text-[#657381]">Área {registroSeleccionado.area} · Marcación {registroSeleccionado.horaMarcada ?? 'sin registrar'}</p>
+                                    </div>
+                                </div>
+                            )}
+                            <label className="block text-sm font-semibold text-[#263746]" htmlFor="motivo">Motivo de la observación</label>
+                            <textarea id="motivo" value={motivo} onChange={(evento) => establecerMotivo(evento.target.value)}
+                                rows={4} required aria-describedby="ayuda-motivo"
+                                className="mt-2 w-full resize-y rounded-xl border border-[#d6e0e7] bg-white p-3 text-sm text-[#263746] outline-none focus:border-[#004373]"
+                                placeholder="Indica qué debe confirmar o corregir el voluntario" />
+                            <p id="ayuda-motivo" className="mt-2 text-xs leading-5 text-[#657381]">El motivo quedará asociado a este registro en la demostración.</p>
+                            <div className="mt-6 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+                                <Dialogo.Close asChild><Boton variante="secundaria">Cancelar</Boton></Dialogo.Close>
+                                <Boton type="submit" variante="observacion" disabled={!motivo.trim()}>
+                                    <MessageSquareWarning className="size-4" aria-hidden="true" /> Guardar observación
+                                </Boton>
+                            </div>
+                        </form>
+                    </Dialogo.Content>
+                </Dialogo.Portal>
+            </Dialogo.Root>
         </section>
     )
 }
