@@ -51,15 +51,3 @@ public/marca/     Isologo institucional
 scripts/         Pruebas de navegador
 docs/            Documentación y capturas
 ```
-
-## Alcance
-
-El menú de usuario simula tres roles. El control de horario permite probar el estado de apertura de la sesión. Los cambios se mantienen en memoria y se restablecen al recargar.
-
-No hay autenticación, autorización de servidor ni conexión a backend. Los avisos de confirmación indican acciones locales, no un guardado remoto. No debe utilizarse con información personal real.
-
-## Colaboración
-
-Trabaja en una rama y envía un pull request. Ejecuta la compilación, la revisión estática y las pruebas antes de solicitar revisión.
-
-Consulta los [componentes visuales e interacciones](docs/ACTUALIZACION_VISUAL.md).
